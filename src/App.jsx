@@ -15,7 +15,8 @@ const API = "https://karaokelistdb.up.railway.app"
 function App() {
     const [musics, setMusics] = useState([]),
         [deletedMusics, setdeletedMusics] = useState([]),
-        [task, setTask] = useState(""),
+        [person, setPerson] = useState(""),
+        [nameMusic, setNameMusic] = useState(""),
         [artist, setArtist] = useState(""),
         [showDel, setShowDel] = useState('hide'),
         [loading, setLoading] = useState(false)
@@ -39,7 +40,6 @@ function App() {
 
             setMusics(resmusics)
             setdeletedMusics(resdeletedMusics)
-
         }
 
         loadData();
@@ -54,8 +54,9 @@ function App() {
         e.preventDefault();
 
         const musics = {
-            id: md5(task + artist + Math.random()),
-            task,
+            id: md5(nameMusic + artist + Math.random()),
+            person,
+            nameMusic,
             artist,
             done: false
         }
@@ -70,7 +71,8 @@ function App() {
 
         setMusics((prevState) => [...prevState, musics])
 
-        setTask('')
+        setPerson('')
+        setNameMusic('')
         setArtist('')
     }
 
@@ -133,7 +135,8 @@ function App() {
                 {musics.map((item) => (
                     <div className='item-list' key={item.id}>
                         <div className="infos">
-                            <h4 className={item.done ? "item-done" : ""}> {item.task}</h4>
+                            <h4 className={item.done ? "item-done" : ""}> {item.nameMusic}</h4>
+                            <p>Quem cantará: {item.person}</p>
                             <p>Artista: {item.artist}</p>
                         </div>
                         <div className='options'>
@@ -159,7 +162,7 @@ function App() {
                 {deletedMusics.map((item) => (
                     <div className="item-list" key={item.id}>
                         <div className="infos">
-                            <h4 className={item.done ? "item-done" : ""}> {item.task}</h4>
+                            <h4 className={item.done ? "item-done" : ""}> {item.nameMusic}</h4>
                             <p>Artista: {item.artist}</p>
                         </div>
                         <div className="options">
@@ -180,19 +183,30 @@ function App() {
     return (
         <div className='App'>
             <div className='title'>
-                <h1>React Todo</h1>
+                <h1>Karaoke list</h1>
             </div>
             <div className='insert-music'>
                 <h3>Insira sua Música</h3>
                 <form onSubmit={handleAdd}>
+                    <div>
+                        <label htmlFor="title">Qual seu nome?</label>
+                        <input
+                            type="text"
+                            placeholder='Seu nome'
+                            name='person'
+                            onChange={(e) => { setPerson(e.target.value) }}
+                            value={person || ''}
+                            required
+                        />
+                    </div>
                     <div>
                         <label htmlFor="title">Qual música irá cantar?</label>
                         <input
                             type="text"
                             placeholder='Titulo da música'
                             name='title'
-                            onChange={(e) => { setTask(e.target.value) }}
-                            value={task || ''}
+                            onChange={(e) => { setNameMusic(e.target.value) }}
+                            value={nameMusic || ''}
                             required
                         />
                     </div>
